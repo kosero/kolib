@@ -78,3 +78,13 @@ void TargetFPS(int number) {
       SDL_DelayNS(targetTime - frameTime);
     }
 }
+
+void ClearBackground(Color color) {
+    SDL_SetRenderDrawColor(ctx.renderer, color.r, color.g, color.b, color.a);
+    SDL_RenderClear(ctx.renderer);
+}
+
+void DrawPixel(int x, int y, Color color) {
+    SDL_SetRenderDrawColor(ctx.renderer, color.r, color.g, color.b, color.a);
+    SDL_RenderPoint(ctx.renderer, x, y);
+}
