@@ -33,10 +33,7 @@ int main(void) {
     TargetFPS(60);
  
     while (!WindowShouldClose()) {
-        float dt = GetDeltaTime();
- 
-        ClearBackground((Color){30, 30, 30, 255});
-        DrawPixel(400, 300, (Color){255, 0, 128, 255});
+        ClearBackground(ICE_BLUE);
         
         Present();
     }
