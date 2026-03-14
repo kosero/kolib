@@ -1,4 +1,6 @@
 #include "kolib.h"
+#include <SDL3/SDL.h>
+#include <SDL3_image/SDL_image.h>
 #include <stdint.h>
 #include <string.h>
 #include <stdbool.h>
@@ -92,7 +94,7 @@ static float _deltaTime = 0.0f;
 static uint64_t now;
 float GetDeltaTime(void) {
     now = SDL_GetTicks();
-    _deltaTime = (_lastTime == 0) ? 0.010f : (float)(now - _lastTime) / 1000000000.0f;
+    _deltaTime = (_lastTime == 0) ? 0.016f : (float)(now - _lastTime) / 1000.0f;
     _lastTime = now;
     return _deltaTime;
 }
@@ -116,4 +118,36 @@ void ClearBackground(Color color) {
 void DrawPixel(int x, int y, Color color) {
     SDL_SetRenderDrawColor(ctx.renderer, color.r, color.g, color.b, color.a);
     SDL_RenderPoint(ctx.renderer, x, y);
+}
+
+void DrawRectangle(Rectangle rect, Color color) {
+    SDL_FRect r = { rect.x, rect.y, rect.width, rect.height };
+    SDL_SetRenderDrawColor(ctx.renderer, color.r, color.g, color.b, color.a);
+    SDL_RenderFillRect(ctx.renderer, &r);
+}
+
+Texture LoadTexture(const char* fileName) {
+    Texture tex = {0};
+    tex.handle = IMG_LoadTexture(ctx.renderer, fileName);
+    if (!tex.handle) {
+        SDL_Log("Failed to load texture %s: %s", fileName, SDL_GetError());
+    } else {
+        float w, h;
+        SDL_GetTextureSize(tex.handle, &w, &h);
+        tex.width = (int)w;
+        tex.height = (int)h;
+    }
+    return tex;
+}
+
+void DrawTexture(Texture texture, int x, int y, Color tint) {
+    if (!texture.handle) return;
+    SDL_FRect dst = { (float)x, (float)y, (float)texture.width, (float)texture.height };
+    SDL_SetTextureColorMod(texture.handle, tint.r, tint.g, tint.b);
+    SDL_SetTextureAlphaMod(texture.handle, tint.a);
+    SDL_RenderTexture(ctx.renderer, texture.handle, NULL, &dst);
+}
+
+void UnloadTexture(Texture texture) {
+    if (texture.handle) SDL_DestroyTexture(texture.handle);
 }

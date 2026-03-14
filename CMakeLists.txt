@@ -13,6 +13,12 @@ SET(SDL_TEST OFF CACHE BOOL "" FORCE)
 SET(SDL_EXAMPLES OFF CACHE BOOL "" FORCE)
 add_subdirectory(external/SDL)
 
+# SDL_image
+SET(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+SET(SDLIMAGE_SAMPLES OFF CACHE BOOL "" FORCE)
+SET(SDLIMAGE_TESTS OFF CACHE BOOL "" FORCE)
+add_subdirectory(external/SDL_image)
+
 # kolib
 ADD_LIBRARY(kolib SHARED
     src/core.c
@@ -23,9 +29,11 @@ TARGET_INCLUDE_DIRECTORIES(kolib
     PUBLIC
         ${PROJECT_SOURCE_DIR}/include
         ${PROJECT_SOURCE_DIR}/external/SDL/include
+        ${PROJECT_SOURCE_DIR}/external/SDL_image/include
 )
 
 TARGET_LINK_LIBRARIES(kolib
     PRIVATE
         SDL3::SDL3-static
+        SDL3_image::SDL3_image-static
 )

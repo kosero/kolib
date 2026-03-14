@@ -142,6 +142,12 @@ typedef struct {
     uint8_t r, g, b, a;
 } Color;
 
+typedef struct {
+    SDL_Texture* handle;
+    int width;
+    int height;
+} Texture;
+
 // Taken from lospec.com/palette-list/slso-clr17 (liked the colors)
 #define DARK_PURPLE    (Color){46,  44,  59,  255}
 #define DARK_STEEL     (Color){62,  65,  95,  255}
@@ -163,5 +169,10 @@ typedef struct {
 
 void ClearBackground(Color color);
 void DrawPixel(int x, int y, Color color);
+void DrawRectangle(Rectangle rect, Color color);
+
+Texture LoadTexture(const char* fileName);
+void DrawTexture(Texture texture, int x, int y, Color tint);
+void UnloadTexture(Texture texture);
 
 #endif // KOLIB_CORE_H
