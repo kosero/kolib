@@ -77,6 +77,16 @@ int IsKeyPressed(int key) {
     return ctx.keys[key] && !ctx.prev_keys[key];
 }
 
+Vec2 GetMousePosition(void) {
+    float x, y;
+    SDL_GetMouseState(&x, &y);
+    return (Vec2){x, y};
+}
+
+int IsMouseButtonDown(int button) {
+    return (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON_MASK(button));
+}
+
 static uint64_t _lastTime = 0;
 static float _deltaTime = 0.0f;
 static uint64_t now;

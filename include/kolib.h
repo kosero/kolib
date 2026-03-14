@@ -2,6 +2,8 @@
 #define KOLIB_CORE_H
 
 #include <SDL3/SDL.h>
+#include "komath.h"
+
 
 int InitWindow(const char* title, int w, int h);
 void CloseWindow(void);
@@ -15,7 +17,15 @@ void TargetFPS(int number);
 int IsKeyDown(int key);
 int IsKeyPressed(int key);
 
-// Key Definitions (SDL Scancodes)
+Vec2 GetMousePosition(void);
+int IsMouseButtonDown(int button);
+
+// Mouse Buttons
+#define MOUSE_BUTTON_LEFT      1
+#define MOUSE_BUTTON_MIDDLE    2
+#define MOUSE_BUTTON_RIGHT     3
+
+// Key Definitions
 #define KEY_UNKNOWN            0
 #define KEY_A                  4
 #define KEY_B                  5
