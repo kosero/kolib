@@ -1,11 +1,15 @@
 #include "kolib.h"
 #include <stdint.h>
+#include <string.h>
+#include <stdbool.h>
 
 typedef struct {
     SDL_Window* window;
     SDL_Renderer* renderer;
     SDL_Event event;
     int should_close;
+    bool keys[SDL_SCANCODE_COUNT];
+    bool prev_keys[SDL_SCANCODE_COUNT];
 } Ctx;
 
 static Ctx ctx = {0};
@@ -39,9 +43,14 @@ int InitWindow(const char* title, int w, int h) {
 }
 
 int WindowShouldClose(void) {
-    SDL_PollEvent(&ctx.event);
-    if (ctx.event.type == SDL_EVENT_QUIT)
-        ctx.should_close = 1;
+    memcpy(ctx.prev_keys, ctx.keys, sizeof(bool) * SDL_SCANCODE_COUNT);
+    const bool* state = SDL_GetKeyboardState(NULL);
+    memcpy(ctx.keys, state, sizeof(bool) * SDL_SCANCODE_COUNT);
+
+    while (SDL_PollEvent(&ctx.event)) {
+        if (ctx.event.type == SDL_EVENT_QUIT)
+            ctx.should_close = 1;
+    }
     return ctx.should_close;
 }
 
@@ -56,6 +65,16 @@ SDL_Window* GetWindowPtr(void) {
 }
 SDL_Renderer* GetRendererPtr(void) {
     return ctx.renderer;
+}
+
+int IsKeyDown(int key) {
+    if (key < 0 || key >= SDL_SCANCODE_COUNT) return 0;
+    return ctx.keys[key];
+}
+
+int IsKeyPressed(int key) {
+    if (key < 0 || key >= SDL_SCANCODE_COUNT) return 0;
+    return ctx.keys[key] && !ctx.prev_keys[key];
 }
 
 static uint64_t _lastTime = 0;

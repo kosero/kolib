@@ -16,6 +16,7 @@ add_subdirectory(external/SDL)
 # kolib
 ADD_LIBRARY(kolib SHARED
     src/core.c
+    src/komath.c
 )
 
 TARGET_INCLUDE_DIRECTORIES(kolib
